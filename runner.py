@@ -11,7 +11,7 @@ def get_nn_p_function_call(args, problem):
     """  Gets training function call for best config 
          as per the 100 random search runs NN-P.  
     """
-    from nn_params import nn_p_params
+    from data.nn_params import nn_p_params
     params = nn_p_params[problem]
 
     # get hidden dimension as nargs='+'
@@ -33,12 +33,37 @@ def get_nn_p_function_call(args, problem):
 
     return cmd
 
+def get_nn_epsilon_function_call(args, problem):
+    """  Gets training function call for best config 
+         as per the 100 random search runs NN-epsilon.  
+    """
+    from data.nn_params import nn_p_params
+    params = nn_p_params[problem]
+
+    # get hidden dimension as nargs='+'
+    hds = list(map(lambda x: str(x), params["hidden_dims"]))
+    hds = " ".join(hds)
+
+    cmd =  f'python -m nsp.scripts.train_model --problem {problem} --model nn_p '
+    cmd += f'--hidden_dims {hds} '
+    cmd += f'--lr {params["lr"]} '
+    cmd += f'--dropout {params["dropout"]} '
+    cmd += f'--optimizer {params["optimizer_type"]} '
+    cmd += f'--batch_size {params["batch_size"]} '
+    cmd += f'--loss_fn {params["loss_fn"]} '
+    cmd += f'--wt_lasso {params["wt_lasso"]} '
+    cmd += f'--wt_ridge {params["wt_ridge"]} '
+    cmd += f'--log_freq {params["log_freq"]} '
+    cmd += f'--n_epochs {params["n_epochs"]} '
+    cmd += f'--use_wandb {params["use_wandb"]} '
+
+    return cmd
 
 def get_nn_e_function_call(args, problem):
     """  Gets training function call for best config 
          as per the 100 random search runs NN-E.  
     """
-    from nn_params import nn_e_params
+    from data.nn_params import nn_e_params
     params = nn_e_params[problem]
 
     cmd =  f'python -m nsp.scripts.train_model --problem {problem} --model nn_e '
@@ -57,7 +82,6 @@ def get_nn_e_function_call(args, problem):
     cmd += f'--log_freq {params["log_freq"]} '
     cmd += f'--n_epochs {params["n_epochs"]} '
     cmd += f'--use_wandb {params["use_wandb"]} '
-
     return cmd
 
 
@@ -66,8 +90,10 @@ def get_scenario_and_test_sets(problem):
          reproduce results from the paper.
     """
     if problem == 'cflp_10_10':
-        scenarios  = [100, 500, 1000] 
-        test_sets = list(range(0,11))
+        # scenarios  = [100, 500, 1000] 
+        # test_sets = list(range(0,11))
+        scenarios  = [10] 
+        test_sets = list(range(0,2))
     elif problem == 'cflp_25_25':
         scenarios  = [100, 500, 1000] 
         test_sets = list(range(0,11))
@@ -77,8 +103,10 @@ def get_scenario_and_test_sets(problem):
 
     # Stochastic Server Location Problem
     elif problem == 'sslp_5_25':
-        scenarios  = [50, 100] 
-        test_sets = list(range(0,11))
+        # scenarios  = [50, 100] 
+        # test_sets = list(range(0,11))
+        scenarios  = [2] 
+        test_sets = list(range(2))
         test_sets.append('siplib')
     elif problem == 'sslp_10_50':
         scenarios  = [50, 100, 500, 1000, 2000] 
@@ -261,5 +289,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     main(args)
-
-
