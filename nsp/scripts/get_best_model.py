@@ -50,6 +50,7 @@ if __name__ == '__main__':
     parser.add_argument('--problem', type=str, default='pp_5')
     parser.add_argument('--model_type', type=str, default='nn_p')
     parser.add_argument('--criterion', type=str, default='val_mae')
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
+    print('unknown args', unknown)
 
     get_best_model(args)

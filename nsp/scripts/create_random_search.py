@@ -1,3 +1,4 @@
+"""Random initialisierung von Hyperparametern für Neuronale Netze"""
 import argparse
 import hashlib
 

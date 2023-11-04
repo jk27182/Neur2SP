@@ -159,6 +159,7 @@ def main(args):
     process_data(args, inst, data)
 
     # initialize and train model
+    # MARKER Hier wird das Training der Neuronalen Netze gestartet
     model = factory_learning_model(args, inst)
     model.train(data)
     model.eval_learning_metrics()
@@ -194,7 +195,7 @@ if __name__ == '__main__':
     parser.add_argument('--wt_lasso', type=float, default=0)
     parser.add_argument('--wt_ridge', type=float, default=0)
     parser.add_argument('--log_freq', type=int, default=10, help='Frequency to evaluate model.')
-    parser.add_argument('--n_epochs', type=int, default=500, help='Number of training epochs.')
+    parser.add_argument('--n_epochs', type=int, default=10, help='Number of training epochs.')
 
     # NN-P parameters
     parser.add_argument('--hidden_dims', nargs="+", type=int, default=[64], help='List for hidden dimension.')
@@ -211,7 +212,6 @@ if __name__ == '__main__':
 
     # Random seed 
     parser.add_argument('--seed', type=int, default=1234, help='Seed.')
-
-    args = parser.parse_args()
-
+    args, unknown = parser.parse_known_args()
+    print('unknown', unknown)
     main(args)

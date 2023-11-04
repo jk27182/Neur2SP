@@ -276,6 +276,7 @@ class InvestmentProblemDataManager(DataManager):
             return (5 * self.rng.rand(2)).tolist()
 
     def _get_random_sol(self):
+        # MARKER Hier wird hardcoded die Daten random generiert
         return (5 * self.rng.rand(2)).tolist()
 
     def _get_data_split(self, data):

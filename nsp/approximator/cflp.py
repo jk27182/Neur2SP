@@ -61,14 +61,17 @@ class FacilityLocationProblemApproximator(Approximator):
         total_time = time.time()
 
         # get first stage mip and scenario embedding
+        # Ruft das Problem auf bei dem erstmal nur die erste Stufe betrachtet wird, es wird aber noch nicht gelöst
         master_mip = self.get_master_mip()
+        # holt sich ein Dictionary mit den Namen von den Variablen
         first_stage_vars = self.get_first_stage_variables(master_mip)
         scenario_embedding = self.get_scenario_embedding(n_scenarios, test_set)
 
         # initialize embedding model
+        # Gibt das Model inklusive dem Embedded Neural Network zurück
         approximator_mip = self.mipper(master_mip,
                                        first_stage_vars,
-                                       self.model,
+                                       self.model, # scheint das Neuronale Netzwerk darzustellen
                                        scenario_embedding).get_mip()
         solving_results = {'time': [], 'primal': [], 'dual': [], 'incumbent': []}
 

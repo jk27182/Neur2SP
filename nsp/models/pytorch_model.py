@@ -121,7 +121,7 @@ class ReLUNetworkPerScenarioModel(Model):
             run_name += f"hds-{hds_str}"
 
         return run_name
-
+    # MARKER TRAINING: 
     def train(self, data):
         self.data = data
         self.loader = self._get_dataloader()
@@ -280,7 +280,7 @@ class ReLUNetworkExpectedModel(Model):
                  loss_fn,
                  wt_lasso,
                  wt_ridge,
-                 agg_type,
+                 agg_type, #Type of aggregation for scenario representations (mean/sum).
                  log_freq,
                  n_epochs,
                  use_wandb):
