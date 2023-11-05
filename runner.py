@@ -182,7 +182,7 @@ def get_commands(problem, args):
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_p --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
             if args.run_all or args.eval_nn_epsilon or args.run_epsilon:
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_epsilon --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
-            if args.run_all or args.eval_nn_e or args.run_epsilon:
+            if args.run_all or args.eval_nn_e:
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_e --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
             if args.run_all or args.eval_ef:
                 cmds.append(f'python -m nsp.scripts.evaluate_extensive --problem {problem} --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
