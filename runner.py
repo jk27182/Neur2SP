@@ -145,11 +145,11 @@ def get_commands(problem, args):
     cmds = []
 
     # generate instance and dataset function calls.
-    if args.run_all or args.run_dg_inst:
+    if args.run_all or args.run_dg_inst or args.run_epsilon:
         cmds.append(f'python -m nsp.scripts.run_dm --problem {problem} --mode GEN_INSTANCE')
-    if args.run_all or args.run_dg_p:
+    if args.run_all or args.run_dg_p or args.run_epsilon:
         cmds.append(f'python -m nsp.scripts.run_dm --problem {problem} --mode GEN_DATASET_P --n_procs {args.n_cpus}')
-    if args.run_all or args.run_dg_e:
+    if args.run_all or args.run_dg_e or args.run_epsilon:
         cmds.append(f'python -m nsp.scripts.run_dm --problem {problem} --mode GEN_DATASET_E --n_procs {args.n_cpus}')
 
     # generate train_model function calls.
@@ -159,12 +159,16 @@ def get_commands(problem, args):
         cmds.append(get_nn_p_function_call(args, problem))
     if args.run_all or args.train_nn_e:
         cmds.append(get_nn_e_function_call(args, problem))
+    if args.run_all or args.train_nn_epsilon or args.run_epsilon:
+        cmds.append(get_nn_epsilon_function_call(args, problem))
 
     # call get best model
     if args.run_all or args.get_best_nn_p_model:
         cmds.append(f'python -m nsp.scripts.get_best_model --problem {problem} --model nn_p ')
     if args.run_all or args.get_best_nn_e_model:
         cmds.append(f'python -m nsp.scripts.get_best_model --problem {problem} --model nn_e ')
+    if args.run_all or args.get_best_nn_epsilon_model or args.run_epsilon:
+        cmds.append(f'python -m nsp.scripts.get_best_model --problem {problem} --model nn_epsilon ')
 
     # call get scenario sets and test sets for problem
     scenarios, test_sets = get_scenario_and_test_sets(problem)
@@ -176,7 +180,9 @@ def get_commands(problem, args):
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model lr --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
             if args.run_all or args.eval_nn_p:
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_p --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
-            if args.run_all or args.eval_nn_e:
+            if args.run_all or args.eval_nn_epsilon or args.run_epsilon:
+                cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_epsilon --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
+            if args.run_all or args.eval_nn_e or args.run_epsilon:
                 cmds.append(f'python -m nsp.scripts.evaluate_model --problem {problem} --model nn_e --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
             if args.run_all or args.eval_ef:
                 cmds.append(f'python -m nsp.scripts.evaluate_extensive --problem {problem} --n_scenarios {scenario} --test_set {test_set} --n_procs {args.n_cpus}')
@@ -231,6 +237,9 @@ if __name__ == '__main__':
     # run all commands (this overrides all below arguments)
     parser.add_argument('--run_all', type=int, default=0,
          help = 'Runs all commands for a specified problem.  Should only be used in if reproducing experiements sequentially.')
+    # run all nn_epsilon tasks
+    parser.add_argument('--run_epsilon', type=int, default=0,
+         help = 'Using NN-epsilon, runs all commands for a specified problem.')
 
     # commands indicating which parts of experiements to run
     parser.add_argument('--run_dg_inst', type=int, default=0,
@@ -247,11 +256,15 @@ if __name__ == '__main__':
          help = 'Trains NN-P model.')
     parser.add_argument('--train_nn_e', type=int, default=0,
          help = 'Trains NN-E model.')
+    parser.add_argument('--train_nn_epsilon', type=int, default=0,
+         help = 'Trains NN-epsilon model.')
 
     parser.add_argument('--get_best_nn_p_model', type=int, default=0,
          help = 'Recovers best model for NN-P.')
     parser.add_argument('--get_best_nn_e_model', type=int, default=0,
          help = 'Recovers best model for NN-E.')
+    parser.add_argument('--get_best_nn_epsilon_model', type=int, default=0,
+         help = 'Recovers best model for NN-epsilon.')
 
     # evaluate models
     parser.add_argument('--eval_lr', type=int, default=0,
@@ -260,6 +273,8 @@ if __name__ == '__main__':
          help = 'Evaluations opimization model with NN-P predictor.')
     parser.add_argument('--eval_nn_e', type=int, default=0,
          help = 'Evaluations opimization model with NN-E predictor.')
+    parser.add_argument('--eval_nn_epsilon', type=int, default=0,
+         help = 'Evaluations opimization model with NN-epsilon predictor.')
     parser.add_argument('--eval_ef', type=int, default=0,
          help = 'Evaluations extensive form.')
 
