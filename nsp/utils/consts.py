@@ -11,6 +11,7 @@ class LearningModelTypes(Enum):
     lr = 1
     nn_p = 2
     nn_e = 3
+    nn_epsilon = 4
 
 
 class LossPenaltyTypes(Enum):
